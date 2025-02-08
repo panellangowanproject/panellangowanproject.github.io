@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Nama dan URL Undangan</title>
-    <style>
 
+     <style>
         /* General Styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -16,70 +16,81 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
 
         h3 {
             color: #2c3e50;
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 24px;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 600;
         }
 
         /* Form Styling */
         .form-container {
-            margin: 10px;
-            display: flex;
-            align-item: center;
-            justify-content: center;
-            gap: 10px;
+            margin-bottom: 2rem;
             width: 100%;
             max-width: 600px;
         }
 
-        .form-container input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.3s ease;
+        .input-group {
+            display: flex;
+            gap: 10px;
+            width: 100%;
         }
 
-        .form-container input:focus {
+        #newName {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        #newName:focus {
             border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
 
         .form-container button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             background-color: #3498db;
             color: #fff;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .form-container button:hover {
             background-color: #2980b9;
             transform: translateY(-1px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
         }
 
         /* Table Styling */
         table {
             width: 100%;
-            max-width: 800px;
+            max-width: 1000px;
             border-collapse: collapse;
             background-color: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 2rem;
         }
 
         th, td {
-            padding: 12px 15px;
+            padding: 15px 20px;
             text-align: left;
             vertical-align: middle;
         }
@@ -87,9 +98,10 @@
         th {
             background-color: #3498db;
             color: #fff;
-            font-weight: bold;
+            font-weight: 600;
             text-transform: uppercase;
-            font-size: 14px;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
         }
 
         tr:nth-child(even) {
@@ -97,86 +109,168 @@
         }
 
         tr:hover {
-            background-color: #e9ecef;
+            background-color: #f1f3f5;
         }
 
         /* URL & Button Container */
         .url-container {
             display: flex;
             flex-direction: column;
+            gap: 8px;
+            min-width: 250px;
+        }
+
+        input[type="text"].url-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"].url-input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        button.action-btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 5px;
         }
 
-        input[type="text"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            background-color: #f8f9fa;
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-
-        input[type="text"]:focus {
-            border-color: #3498db;
-        }
-
-        button {
-            padding: 6px 10px;
-            background-color: #3498db;
+        button.copy-btn {
+            background-color: #2ecc71;
             color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            width: 100%;
         }
 
-        button.delete-button {
+        button.share-btn {
+            background-color: #9b59b6;
+            color: #fff;
+        }
+
+        button.delete-btn {
             background-color: #e74c3c;
+            color: #fff;
         }
 
-        button.delete-button:hover {
-            background-color: #c0392b;
-        }
-
-        button:hover {
-            background-color: #2980b9;
+        button.action-btn:hover {
             transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
+        button.copy-btn:hover { background-color: #27ae60; }
+        button.share-btn:hover { background-color: #8e44ad; }
+        button.delete-btn:hover { background-color: #c0392b; }
 
         /* Alert Styling */
         .alert {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
+            top: 25px;
+            right: 25px;
+            padding: 12px 25px;
             background-color: #2ecc71;
             color: #fff;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             display: none;
             z-index: 1000;
+            font-weight: 500;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
             .form-container {
+                margin-bottom: 1.5rem;
+            }
+
+            .input-group {
                 flex-direction: column;
+                gap: 10px;
+            }
+
+            #newName {
+                width: 100%;
+                padding: 12px;
             }
 
             .form-container button {
                 width: 100%;
+                padding: 12px;
             }
 
             table {
-                font-size: 14px;
+                font-size: 0.9rem;
+                border-radius: 8px;
             }
 
             th, td {
+                padding: 12px 15px;
+            }
+
+            .url-container {
+                min-width: auto;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            button.action-btn {
+                width: 100%;
                 padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            th, td {
+                padding: 10px 12px;
+            }
+
+            .alert {
+                top: 15px;
+                right: 15px;
+                left: 15px;
+                width: auto;
+                text-align: center;
+                animation: slideInMobile 0.3s ease-out;
+            }
+
+            @keyframes slideInMobile {
+                from { transform: translateY(-100%); }
+                to { transform: translateY(0); }
             }
         }
     </style>
