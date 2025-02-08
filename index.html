@@ -297,7 +297,8 @@
 
         // Tambahkan nama baru ke daftar
         async function addName() {
-            const newName = document.getElementById('newName').value.trim();
+            const newNameInput = document.getElementById('newName'); // Ambil elemen input
+            const newName = newNameInput.value.trim(); // Ambil nilai input dan hilangkan spasi di awal/akhir
             if (!newName) {
                 showAlert('Nama tidak boleh kosong!');
                 return;
@@ -336,6 +337,7 @@
 
             if (updateResponse.ok) {
                 showAlert('Nama berhasil ditambahkan!');
+                newNameInput.value = ''; // Kosongkan input setelah berhasil ditambahkan
                 loadNames();
             } else {
                 showAlert('Gagal menambahkan nama.');
