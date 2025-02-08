@@ -132,6 +132,14 @@
             width: 100%;
         }
 
+        button.delete-button {
+            background-color: #e74c3c;
+        }
+
+        button.delete-button:hover {
+            background-color: #c0392b;
+        }
+
         button:hover {
             background-color: #2980b9;
             transform: translateY(-1px);
@@ -183,6 +191,7 @@
                 <th>No.</th>
                 <th>Nama Undangan</th>
                 <th>Alamat URL</th>
+                <th>Aksi</th>
             </tr>
         </thead>
         <tbody id="list"></tbody>
@@ -269,10 +278,19 @@
                 container.appendChild(shareButton);
                 urlCell.appendChild(container);
 
+                // Kolom Aksi (Hapus)
+                const actionCell = document.createElement('td');
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Hapus';
+                deleteButton.className = 'delete-button';
+                deleteButton.addEventListener('click', () => deleteName(name));
+                actionCell.appendChild(deleteButton);
+
                 // Tambahkan ke baris
                 tr.appendChild(numberCell);
                 tr.appendChild(nameCell);
                 tr.appendChild(urlCell);
+                tr.appendChild(actionCell);
                 listElement.appendChild(tr);
             });
         }
@@ -321,6 +339,43 @@
                 loadNames();
             } else {
                 showAlert('Gagal menambahkan nama.');
+            }
+        }
+
+        // Hapus nama dari daftar
+        async function deleteName(nameToDelete) {
+            const filePath = 'data-input/daftar-nama.txt';
+            const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+                headers: {
+                    'Authorization': `token ${githubToken}`
+                }
+            });
+            const data = await response.json();
+            const content = atob(data.content); // Decode base64 content
+            const names = content.split('\n').map(name => name.trim()).filter(Boolean);
+
+            // Filter nama yang akan dihapus
+            const updatedNames = names.filter(name => name !== nameToDelete);
+            const newContent = updatedNames.join('\n');
+
+            const updateResponse = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${githubToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: 'Menghapus nama undangan',
+                    content: btoa(newContent), // Encode to base64
+                    sha: data.sha
+                })
+            });
+
+            if (updateResponse.ok) {
+                showAlert('Nama berhasil dihapus!');
+                loadNames();
+            } else {
+                showAlert('Gagal menghapus nama.');
             }
         }
 
